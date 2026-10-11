@@ -414,6 +414,75 @@ a.color-rise-btn:active,
   width: 100%;
 }
 
+.gdg-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-color);
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: introOverlayAutoDismiss 1.88s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+html.intro-dismissed .gdg-intro-overlay {
+  display: none !important;
+}
+
+.gdg-intro-overlay.intro-fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gdg-intro-logo {
+  width: clamp(165px, 20vw, 225px);
+  height: auto;
+  aspect-ratio: 1104 / 585;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: introLogoPop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.gdg-intro-logo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+
+@keyframes introLogoPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes introOverlayAutoDismiss {
+  0% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0;
+    pointer-events: none;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -431,9 +500,14 @@ a.color-rise-btn:active,
   .mobile-menu-drawer,
   .footer-contact-icon,
   .team-photo-container img,
-  .section-fade-wrap {
+  .section-fade-wrap,
+  .gdg-intro-overlay,
+  .gdg-intro-logo {
     animation: none !important;
     transition: none !important;
     transform: none !important;
+  }
+  .gdg-intro-overlay {
+    display: none !important;
   }
 }

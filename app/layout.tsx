@@ -25,6 +25,11 @@ export default function RootLayout({
     <html lang="en" data-theme="light">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem('gdg_intro_shown')||window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('intro-dismissed');}}catch(e){}`
+          }}
+        />
       </head>
       <body>
         {children}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import UpcomingEvent from './components/UpcomingEvent';
@@ -12,6 +13,8 @@ import ProfileModal from './components/ProfileModal';
 export default function Home() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
+  const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('gdg_theme') as 'light' | 'dark' | null;
@@ -21,6 +24,37 @@ export default function Home() {
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
+
+    let alreadySeen = false;
+    let isReduced = false;
+    try {
+      alreadySeen = Boolean(sessionStorage.getItem('gdg_intro_shown'));
+      isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch {
+      alreadySeen = false;
+    }
+
+    if (alreadySeen || isReduced) {
+      setIntroDone(true);
+      return;
+    }
+
+    try {
+      sessionStorage.setItem('gdg_intro_shown', 'true');
+    } catch {}
+
+    const fadeTimer = setTimeout(() => {
+      setIsFading(true);
+    }, 1550);
+
+    const doneTimer = setTimeout(() => {
+      setIntroDone(true);
+    }, 1880);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(doneTimer);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -32,6 +66,23 @@ export default function Home() {
 
   return (
     <>
+      {!introDone && (
+        <div
+          className={`gdg-intro-overlay ${isFading ? 'intro-fading' : ''}`}
+          aria-hidden="true"
+        >
+          <div className="gdg-intro-logo">
+            <Image
+              src="/gdg-logo.svg"
+              alt="GDG Logo"
+              width={225}
+              height={119}
+              priority
+              style={{ objectFit: 'contain' }}
+            />
+          </div>
+        </div>
+      )}
       <div className="passive-grid" aria-hidden="true" />
       <Navbar
         theme={theme}

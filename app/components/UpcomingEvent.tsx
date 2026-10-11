@@ -52,7 +52,7 @@ export default function UpcomingEvent() {
               boxShadow: "3px 3px 0px var(--card-border)",
             }}
           >
-            FALL 2024
+            FALL 2026
           </div>
         </div>
 
